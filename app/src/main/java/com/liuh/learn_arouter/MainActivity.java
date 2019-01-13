@@ -22,6 +22,19 @@ public class MainActivity extends BaseActivity {
                 ARouter.getInstance().build("/app/SimpleActivity").navigation();
             }
         });
-        
+
+
+        findViewById(R.id.btn_jump_with_argu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance()
+                        .build(PathConstants.path_jump_accept_argu)
+                        .withString("username", "zhangsan")
+                        .withInt("userage", 3)
+                        .withParcelable("student", new Student("lisi", 5))
+                        .navigation();
+            }
+        });
+
     }
 }

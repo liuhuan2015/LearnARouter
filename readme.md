@@ -55,6 +55,51 @@ ARouter是阿里android技术团队开源的一款路由框架，这款路由框
 2. 每个页面的注入，即 ARouter.getInstance().inject(this); 这句代码出现的次数会非常的多，需要进行抽取。
 而且按照常规的逻辑，有注入，一般就会有解绑或者释放资源，这个也许要进行抽取处理。
 
+#### 三、简单封装
+
+1. path是一定要统一管理的（放到一个类中去）
+2. 优秀的第三方框架如果有注入或者绑定的API，那与之对应的一般就会有释放或者解绑资源的API。
+在Application中进行的ARouter的初始化，同样在Application要进行destory
+```java
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ARouter.getInstance().destroy();
+    }
+```
+
+#### 四、带参数的界面跳转
+带参数的跳转是很常见的功能，使用intent跳转可以通过Bundle传递数据，而通过ARouter跳转，传递参数需要注意：
+
+1. 对象需要Parcelable或者Serializable序列化
+2. 字符串、char、int等基本类型都是可以传递的，也可以直接传Bundle、数组、列表等很多对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -21,4 +21,10 @@ public class MyApplication extends Application {
         // ARouter 初始化
         ARouter.init(this);
     }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ARouter.getInstance().destroy();
+    }
 }

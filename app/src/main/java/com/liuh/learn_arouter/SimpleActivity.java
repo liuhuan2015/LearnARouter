@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
-@Route(path = "/app/SimpleActivity")
+@Route(path = PathConstants.PATH_JUMP_SIMPLE)
 public class SimpleActivity extends BaseActivity {
 
     @Override

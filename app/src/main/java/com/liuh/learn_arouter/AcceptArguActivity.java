@@ -8,7 +8,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 
-@Route(path = PathConstants.path_jump_accept_argu)
+@Route(path = PathConstants.PATH_JUMP_ACCEPT_ARGU)
 public class AcceptArguActivity extends BaseActivity {
 
     @Autowired(name = "username")

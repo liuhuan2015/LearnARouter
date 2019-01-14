@@ -74,6 +74,28 @@ ARouter是阿里android技术团队开源的一款路由框架，这款路由框
 1. 对象需要Parcelable或者Serializable序列化
 2. 字符串、char、int等基本类型都是可以传递的，也可以直接传Bundle、数组、列表等很多对象
 
+在接收方通过@Autowired注解来进行接收
+```java
+    @Autowired(name = "username")
+    String name;
+    @Autowired(name = "userage")
+    int age;
+    @Autowired(name = "student")
+    Student student;
+```
+**注意：接收方同样需要inject，否则接收不到数据**
+```java
+  ARouter.getInstance().inject(this);
+```
+
+#### 五、界面跳转动画
+直接调用withTransition,里面传入两个动画即可（R.anim.xxx）
+```java
+    ARouter.getInstance().build("/app/SimpleActivity").withTransition(R.anim.enter_anim, R.anim.exit_anim).navigation();
+```
+
+#### 六、使用URI进行跳转
+ARouter框架也可以使用URI进行匹配跳转，只需匹配路径一致即可进行跳转。
 
 
 

@@ -19,7 +19,9 @@
         </activity>
         <activity android:name=".SimpleActivity" />
         <activity android:name=".AcceptArguActivity" />
-        <activity android:name=".JumpByUriActivity"></activity>
+        <activity android:name=".JumpByUriActivity" />
+        <activity android:name=".JumpWithInterceptorActivity" />
+        <activity android:name=".ARouterStartActivityForResultActivity" />
     </application>
 
 </manifest>

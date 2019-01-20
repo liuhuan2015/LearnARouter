@@ -7,4 +7,8 @@ public class PathConstants {
 
     public static final String PATH_JUMP_BY_URI = "/app/JumpByUriActivity";
 
+    public static final String PATH_URL_INTERCEPTOR = "/app/JumpWithInterceptorActivity";
+
+    public static final String PATH_STARTACTIVITY_FORRESULT = "/app/ARouterStartActivityForResultActivity";
+
 }

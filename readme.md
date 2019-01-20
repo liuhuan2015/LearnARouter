@@ -95,7 +95,129 @@ ARouter是阿里android技术团队开源的一款路由框架，这款路由框
 ```
 
 #### 六、使用URI进行跳转
-ARouter框架也可以使用URI进行匹配跳转，只需匹配路径一致即可进行跳转。
+ARouter框架也可以使用URI进行匹配跳转，只需匹配路径一致即可进行跳转。使用这种跳转方式有什么使用场景呢？不知道。
+```java
+    findViewById(R.id.btn_jump_by_uri).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(PathConstants.PATH_JUMP_BY_URI);
+                ARouter.getInstance().build(uri).navigation();
+            }
+        });
+```
+#### 七、Fragment跳转
+使用ARouter也可以进行Fragment的跳转，可参照Activity的跳转，第一步仍是先写上类注释，然后是强转。
+```java
+    Fragment fragment=(Fragment)ARouter.getInstance().build(Constance.ACTIVITY_URL_FRAGMENT).navigation();
+```
+#### 八、进阶用法---拦截器
+
+拦截器是ARouter框架的一个亮点，说起拦截器，可能印象更加深刻的是OkHttp的拦截器，OkHttp的拦截器主要是用来拦截请求体（比如添加请求Cookie）和拦截响应体（判断token是否过期），
+在真正的请求和响应前做一些判断和修改然后再去进行操作，大抵这就是拦截器的简单概念。
+
+ARouter的拦截器，是通过实现IInterceptor接口，重写init()和process()方法去完成拦截器内部操作的。
+```java
+@Interceptor(priority = 1)
+public class UseIInterceptor implements IInterceptor {
+
+    @Override
+    public void init(Context context) {
+        Log.e("-----", "UseIInterceptor 拦截器 init ...");
+    }
+
+    @Override
+    public void process(Postcard postcard, InterceptorCallback callback) {
+        String name = Thread.currentThread().getName();
+
+        Log.e("-----", "UseIInterceptor 拦截器开始执行，线程名称 ：" + name);
+    }
+
+}
+```
+定义ARouter拦截器必须要使用@Interceptor(priority = 1)类注解，里面的priority声明了拦截器的优先级，数值越小的，优先级越高，会最先执行。
+ARouter的拦截器中是不允许有两个拦截器的优先级一样的，有一样的话项目编译时就会报错。
+
+拦截器使用:
+```java
+        findViewById(R.id.btn_jump_with_interceptor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(PathConstants.PATH_URL_INTERCEPTOR)
+                        .navigation(MainActivity.this,
+                                new NavigationCallback() {
+                                    @Override
+                                    public void onFound(Postcard postcard) {
+                                        // 路由目标被发现时调用
+                                        Log.e("-----", "onFound...");
+                                        String group = postcard.getGroup();
+                                        String path = postcard.getPath();
+                                        Log.e("-----", "group: " + group + " path: " + path);
+                                    }
+
+                                    @Override
+                                    public void onLost(Postcard postcard) {
+                                        Log.e("-----", "onLost...");
+                                    }
+
+                                    @Override
+                                    public void onArrival(Postcard postcard) {
+                                        // 路由到达后调用
+                                        Log.e("-----", "onArrival...");
+
+                                    }
+
+                                    @Override
+                                    public void onInterrupt(Postcard postcard) {
+                                        // 路由拦截时调用
+                                        Log.e("-----", "onInterrupt...");
+                                    }
+                                });
+            }
+        });
+```
+
+项目运行时，就会进行两个拦截器的初始化，然后调用 NavigationCallback 这个回调函数里面的onFound(),
+然后执行拦截器里面的process()方法，最终回调到NavigationCallback里面的onArrival()方法。拦截器的工作流程大概如此。
+
+对于NavigationCallback的简单理解：ARouter在路由跳转的过程中，我们可以监听路由的具体过程，onFound，onArrival，onLost，onInterrupt。
+这四个方法中的 Postcard 参数表示什么意思呢？A container that contains the roadmap.(直译过来意思就是：一个包含线路图的容器),
+通过它可以获得路由相应的信息。
+
+路径的组：
+```java
+  String group = postcard.getGroup();
+```
+ARouter框架在项目编译期会扫描所有的注册页面/字段/拦截器，在运行期不会一股脑全部加载进来，而是使用了分组管理。
+根据打印的日志，可以发现 getGroup() 的值默认就是第一个//(两个分隔符)之间的内容。
+
+因此，我们也可以使用ARouter的分组，来进行界面跳转。
+
+#### 九、ARouter如何实现类似startActivityForResult()?
+```java
+    findViewById(R.id.btn_mock_startActivityForResult).setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ARouter.getInstance().build(PathConstants.PATH_STARTACTIVITY_FORRESULT)
+                    .withString("name", "zhangsan")
+                    .withInt("age", 3)
+                    .navigation(MainActivity.this, 123);
+        }
+    });
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
